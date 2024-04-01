@@ -3,7 +3,8 @@ import logging
 
 from audiobook_generator.config.general_config import GeneralConfig
 from audiobook_generator.core.audiobook_generator import AudiobookGenerator
-from audiobook_generator.tts_providers.base_tts_provider import get_supported_tts_providers
+from audiobook_generator.tts_providers.base_tts_provider import \
+    get_supported_tts_providers
 
 logging.basicConfig(
     level=logging.INFO,
@@ -25,7 +26,7 @@ def handle_args():
     )
     parser.add_argument(
         "--log",
-        choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
+        choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
         default="INFO",
         help="Log level (default: INFO), can be DEBUG, INFO, WARNING, ERROR, CRITICAL",
     )
@@ -91,26 +92,26 @@ def handle_args():
     edge_tts_group = parser.add_argument_group(title="edge specific")
     edge_tts_group.add_argument(
         "--voice_rate",
-        help='''
+        help="""
             Speaking rate of the text. Valid relative values range from -50%%(--xxx='-50%%') to +100%%. 
             For negative value use format --arg=value,
-        '''
+        """,
     )
 
     edge_tts_group.add_argument(
         "--voice_volume",
-        help='''
+        help="""
             Volume level of the speaking voice. Valid relative values floor to -100%%.
             For negative value use format --arg=value,
-        '''
+        """,
     )
 
     edge_tts_group.add_argument(
         "--voice_pitch",
-        help='''
+        help="""
             Baseline pitch for the text.Valid relative values like -80Hz,+50Hz, pitch changes should be within 0.5 to 1.5 times the original audio.
             For negative value use format --arg=value,
-        '''
+        """,
     )
 
     edge_tts_group.add_argument(
@@ -123,6 +124,13 @@ def handle_args():
         "--break_duration",
         default="1250",
         help="Break duration in milliseconds for the different paragraphs or sections (default: 1250). Valid values range from 0 to 5000 milliseconds.",
+    )
+
+    xtts_tts_group = parser.add_argument_group(title="xtts specific")
+    xtts_tts_group.add_argument(
+        "--voice_sample_wav",
+        default="sample_voices/demo_speaker0.wav",
+        help="Test demo speaker file",
     )
 
     args = parser.parse_args()
