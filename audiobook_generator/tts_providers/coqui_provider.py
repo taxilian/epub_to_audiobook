@@ -12,7 +12,7 @@ from audiobook_generator.tts_providers.base_tts_provider import BaseTTSProvider
 logger = logging.getLogger(__name__)
 
 
-class XTTSProvider(BaseTTSProvider):
+class CoquiProvider(BaseTTSProvider):
     def __init__(self, config: GeneralConfig):
         # Init TTS with the target model name
 
@@ -26,9 +26,6 @@ class XTTSProvider(BaseTTSProvider):
         config.voice_volume = config.voice_volume or "+0%"
         config.voice_pitch = config.voice_pitch or "+0Hz"
         config.proxy = config.proxy or None
-        config.voice_sample_wav_path = (
-            config.voice_sample_wav_path or "sample_voices/demo_speaker0.wav"
-        )
         config.model_name = config.model_name or "tts_models/en/ljspeech/tacotron2-DDC"
 
         self.tts = TTS(
@@ -36,9 +33,7 @@ class XTTSProvider(BaseTTSProvider):
             model_name=config.model_name,
             progress_bar=True,
         ).to(device)
-
-        self.get_supported_models()
-
+        
         self.price = 0.000
         super().__init__(config)
 
