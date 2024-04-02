@@ -1,5 +1,6 @@
 import logging
 import math
+import tempfile
 
 import torch
 from pydub import AudioSegment
@@ -47,26 +48,30 @@ class CoquiProvider(BaseTTSProvider):
         output_file: str,
         audio_tags: AudioTags,
     ):
-        wav_file_path = output_file[:-4] + '.wav'
 
-        if self.tts.is_multi_lingual:
-            print(len(text))
-            self.tts.tts_to_file(
-                text,
-                speaker_wav=self.config.voice_sample_wav_path,
-                language=self.config.language_coqui,
-                file_path=wav_file_path,
-                split_sentences=True,
-            )
-        else:
-            self.tts.tts_to_file(
-                text,
-                file_path=wav_file_path,
-                split_sentences=True,
-            )
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            print('created temporary directory', tmpdirname)
 
-        # Convert the wav file to the desired format
-        AudioSegment.from_wav(wav_file_path).export(output_file, format=self.config.output_format)
+            tmpfilename = tmpdirname + '/file.wav'
+
+            if self.tts.is_multi_lingual:
+                print(len(text))
+                self.tts.tts_to_file(
+                    text,
+                    speaker_wav=self.config.voice_sample_wav_path,
+                    language=self.config.language_coqui,
+                    file_path=tmpfilename,
+                    split_sentences=True,
+                )
+            else:
+                self.tts.tts_to_file(
+                    text,
+                    file_path=tmpfilename,
+                    split_sentences=True,
+                )
+
+            # Convert the wav file to the desired format
+            AudioSegment.from_wav(tmpfilename).export(output_file, format=self.config.output_format)
 
         set_audio_tags(output_file, audio_tags)
 
