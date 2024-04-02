@@ -55,9 +55,9 @@ def get_tts_provider(config) -> BaseTTSProvider:
 
         return EdgeTTSProvider(config)
     elif config.tts == TTS_COQUI:
-        from audiobook_generator.tts_providers.coqui_provider import \
-            CoquiProvider
+        from audiobook_generator.tts_providers.coqui_tts_provider import \
+            CoquiTTSProvider
 
-        return CoquiProvider(config)
+        return CoquiTTSProvider(config)
     else:
         raise ValueError(f"Invalid TTS provider: {config.tts}")

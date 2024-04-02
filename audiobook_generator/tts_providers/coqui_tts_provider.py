@@ -14,7 +14,7 @@ from audiobook_generator.tts_providers.base_tts_provider import BaseTTSProvider
 logger = logging.getLogger(__name__)
 
 
-class CoquiProvider(BaseTTSProvider):
+class CoquiTTSProvider(BaseTTSProvider):
     def __init__(self, config: GeneralConfig):
         # Init TTS with the target model name
 
