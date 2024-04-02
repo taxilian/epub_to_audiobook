@@ -370,6 +370,12 @@ Here are some examples that demonstrate various option combinations:
    python3 main.py "path/to/book.epub" "path/to/output/folder" --tts coqui --model_name tts_models/multilingual/multi-dataset/xtts_v2 --language_coqui "en"
    ```
 
+3. **Coqui conversion with xtts v2 voice clone and custom voice in en language**
+
+   ```sh
+   python3 main.py "path/to/book.epub" "path/to/output/folder" --tts coqui --model_name tts_models/multilingual/multi-dataset/xtts_v2 --voice_sample_wav_path "path/to/sample.wav" --language_coqui "en"
+   ```
+
 ## Troubleshooting
 
 ### ModuleNotFoundError: No module named 'importlib_metadata'
@@ -379,7 +385,6 @@ This may be because the Python version you are using is [less than 3.8](https://
 ### FileNotFoundError: [Errno 2] No such file or directory: 'ffmpeg'
 
 Make sure ffmpeg biary is accessible from your path. If you are on a mac and use homebrew, you can do `brew install ffmpeg`, On Ubuntu you can do `sudo apt install ffmpeg`
-
 
 ## Related Projects
 
