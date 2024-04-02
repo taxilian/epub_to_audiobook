@@ -3,9 +3,8 @@ import logging
 
 from audiobook_generator.config.general_config import GeneralConfig
 from audiobook_generator.core.audiobook_generator import AudiobookGenerator
-from audiobook_generator.tts_providers.base_tts_provider import (
-    get_supported_tts_providers,
-)
+from audiobook_generator.tts_providers.base_tts_provider import \
+    get_supported_tts_providers
 
 logging.basicConfig(
     level=logging.INFO,
@@ -125,6 +124,19 @@ def handle_args():
         "--break_duration",
         default="1250",
         help="Break duration in milliseconds for the different paragraphs or sections (default: 1250). Valid values range from 0 to 5000 milliseconds.",
+    )
+
+    coqui_tts_group = parser.add_argument_group(title="coqui specific")
+    coqui_tts_group.add_argument(
+        "--voice_sample_wav_path",
+        default="sample_voices/samples_en_man_1.wav",
+        help="Path to the sample wav file to be used for the voice of the TTS provider",
+    )
+
+    coqui_tts_group.add_argument(
+        "--language_coqui",
+        default="en",
+        help="Language for the text-to-speech service using Coqui provider(default: en). Possible values are ['en', 'es', 'fr', 'de', 'it', 'pt', 'pl', 'tr', 'ru', 'nl', 'cs', 'ar', 'zh-cn', 'hu', 'ko', 'ja', 'hi']",
     )
 
     args = parser.parse_args()

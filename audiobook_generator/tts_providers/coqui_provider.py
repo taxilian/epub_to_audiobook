@@ -22,18 +22,15 @@ class CoquiProvider(BaseTTSProvider):
 
         # TTS provider specific config
         config.output_format = config.output_format or "wav"
-        config.voice_rate = config.voice_rate or "+0%"
-        config.voice_volume = config.voice_volume or "+0%"
-        config.voice_pitch = config.voice_pitch or "+0Hz"
-        config.proxy = config.proxy or None
         config.model_name = config.model_name or "tts_models/en/ljspeech/tacotron2-DDC"
+        config.language_coqui = config.language_coqui or "en"
+        config.voice_sample_wav_path = config.voice_sample_wav_path or ""
 
         self.tts = TTS(
-            # model_name="tts_models/multilingual/multi-dataset/xtts_v2",
             model_name=config.model_name,
             progress_bar=True,
         ).to(device)
-        
+
         self.price = 0.000
         super().__init__(config)
 
@@ -49,12 +46,21 @@ class CoquiProvider(BaseTTSProvider):
         output_file: str,
         audio_tags: AudioTags,
     ):
-        self.tts.tts_to_file(
-            text,
-            # speaker_wav=self.config.voice_sample_wav_path,
-            # language="en",
-            file_path=output_file,
-        )
+        if self.tts.is_multi_lingual:
+            print(len(text))
+            self.tts.tts_to_file(
+                text,
+                speaker_wav=self.config.voice_sample_wav_path,
+                language=self.config.language_coqui,
+                file_path=output_file,
+                split_sentences=True,
+            )
+        else:
+            self.tts.tts_to_file(
+                text,
+                file_path=output_file,
+                split_sentences=True,
+            )
 
         set_audio_tags(output_file, audio_tags)
 
