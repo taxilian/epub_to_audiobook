@@ -4,10 +4,6 @@ mutagen==1.47.0
 openai==1.2.2
 requests==2.31.0
 socksio==1.0.0
-<<<<<<< HEAD
-edge-tts==6.1.9
-TTS==0.22.0
-=======
 edge-tts==6.1.10
 pydub==0.25.1
->>>>>>> 767f040546bb4f756a2b3025919737bb71a45403
+TTS==0.22.0
