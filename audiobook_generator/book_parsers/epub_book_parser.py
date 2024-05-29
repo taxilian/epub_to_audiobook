@@ -45,6 +45,8 @@ class EpubBookParser(BaseBookParser):
         for item in self.book.get_items_of_type(ebooklib.ITEM_DOCUMENT):
             content = item.get_content()
             soup = BeautifulSoup(content, "lxml")
+            for data in soup.find_all(class_="fff_chapter_title"):
+                data.decompose()
             title = ""
             title_levels = ['title', 'h1', 'h2', 'h3']
             for level in title_levels:
@@ -68,6 +70,12 @@ class EpubBookParser(BaseBookParser):
             logger.debug(f"Cleaned text step 1: <{cleaned_text[:]}>")
             cleaned_text = re.sub(r"\s+", " ", cleaned_text)
             logger.debug(f"Cleaned text step 2: <{cleaned_text[:100]}>")
+
+            # Convert any unicode quotes to ASCII, and " " to have a newline between (most likely it would be two lines of dialog)
+            cleaned_text = re.sub(r"[”“]", '"', cleaned_text)
+            cleaned_text = re.sub(r"\" \"", "\"\n\"", cleaned_text)
+
+            cleaned_text = re.sub(r"The narrative has been taken without authorization; if you see it on Amazon, report the incident.", '', cleaned_text)
 
             # Removes end-note numbers
             if self.config.remove_endnotes:
