@@ -51,7 +51,7 @@ class EpubBookParser(BaseBookParser):
                 if soup.find(level):
                     title = soup.find(level).text
                     break
-            raw = soup.get_text(strip=False)
+            raw = soup.get_text(strip=False, separator="\n")
             logger.debug(f"Raw text: <{raw[:]}>")
 
             # Replace excessive whitespaces and newline characters based on the mode
@@ -61,6 +61,9 @@ class EpubBookParser(BaseBookParser):
                 cleaned_text = re.sub(r"[\n]{2,}", break_string, raw.strip())
             else:
                 raise ValueError(f"Invalid newline mode: {self.config.newline_mode}")
+
+            # Normalize quotes, replace any unicode quotes with ASCII quotes
+            cleaned_text = re.sub(r'[“”“]', '"', cleaned_text)
 
             logger.debug(f"Cleaned text step 1: <{cleaned_text[:]}>")
             cleaned_text = re.sub(r"\s+", " ", cleaned_text)

@@ -1,5 +1,6 @@
 import logging
 import math
+import re
 import tempfile
 
 import torch
@@ -24,7 +25,7 @@ class CoquiTTSProvider(BaseTTSProvider):
 
         # TTS provider specific config
         config.output_format = config.output_format or 'mp3'
-        config.model_name = config.model_name or 'tts_models/en/ljspeech/tacotron2-DDC'
+        config.model_name = config.model_name or 'tts_models/multilingual/multi-dataset/xtts_v2'
         config.language_coqui = config.language_coqui or 'en'
         config.voice_sample_wav_path = config.voice_sample_wav_path or ''
 
@@ -54,19 +55,26 @@ class CoquiTTSProvider(BaseTTSProvider):
 
             tmpfilename = tmpdirname + '/file.wav'
 
+            text = re.sub(r"[”“]", '"', text)
+            text = re.sub(r"\" \"", "\"\n\"", text)
+            print("Text to be converted to speech: ", text)
+
             if self.tts.is_multi_lingual:
                 print(len(text))
                 self.tts.tts_to_file(
                     text,
                     speaker_wav=self.config.voice_sample_wav_path,
                     language=self.config.language_coqui,
+                    # emotion="angry",
                     file_path=tmpfilename,
                     split_sentences=True,
+                    speaker=self.config.voice_name or None,
                 )
             else:
                 self.tts.tts_to_file(
                     text,
                     file_path=tmpfilename,
+                    speaker=self.config.voice_name or None,
                     split_sentences=True,
                 )
 
