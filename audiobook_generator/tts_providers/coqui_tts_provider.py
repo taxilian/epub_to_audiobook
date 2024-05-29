@@ -55,13 +55,9 @@ class CoquiTTSProvider(BaseTTSProvider):
 
             tmpfilename = tmpdirname + '/file.wav'
 
-<<<<<<< Updated upstream
             text = re.sub(r"[”“]", '"', text)
             text = re.sub(r"\" \"", "\"\n\"", text)
             print("Text to be converted to speech: ", text)
-=======
-            # print("Text to be converted to speech: ", text)
->>>>>>> Stashed changes
 
             if self.tts.is_multi_lingual:
                 print(len(text))
