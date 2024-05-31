@@ -47,6 +47,18 @@ class EpubBookParser(BaseBookParser):
             soup = BeautifulSoup(content, "lxml")
             for data in soup.find_all(class_="fff_chapter_title"):
                 data.decompose()
+            em_tags = ['em', 'i', 'b', 'strong']
+            for tag in em_tags:
+                for found in soup.select(tag):
+                    # replace the tag with [text]
+                    found.insert_before("[")
+                    found.insert_after("]")
+                    found.unwrap()
+            strip_tags = ['b', 'i', 'em', 'strong', 'u', 'a', 'span']
+            for tag in strip_tags:
+                for found in soup.select(tag):
+                    found.unwrap()
+            soup.smooth()
             title = ""
             title_levels = ['title', 'h1', 'h2', 'h3']
             for level in title_levels:
