@@ -36,7 +36,7 @@ async def get_supported_voices():
 class CommWithPauses(Communicate):
     # This class uses edge_tts to generate text
     # but with pauses for example:- text: 'Hello
-    # this is simple text. [pause: 2s] Paused 2s'
+    # this is simple text. [[%pause: 2s%]] Paused 2s'
     def __init__(
         self,
         text: str,
@@ -48,13 +48,13 @@ class CommWithPauses(Communicate):
         self.file = io.BytesIO()
 
     def parse_text(self):
-        if not "[pause:" in self.text:
+        if not "[[%pause:" in self.text:
             return [(0, self.text)]
         
-        parts = self.text.split("[pause:")
+        parts = self.text.split("[[%pause:")
         for part in parts:
             if "]" in part:
-                pause_time, content = part.split("]", 1)
+                pause_time, content = part.split("%]]", 1)
                 yield int(pause_time), content.strip()
 
             else:
@@ -142,7 +142,7 @@ class EdgeTTSProvider(BaseTTSProvider):
         # Replace break string with pause tag
         text = text.replace(
             self.get_break_string().strip(),
-            f"[pause: {self.config.break_duration}]"
+            f"[[%pause: {self.config.break_duration}%]]"
         )
 
         communicate = CommWithPauses(
