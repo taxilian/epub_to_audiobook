@@ -53,7 +53,7 @@ class CommWithPauses(Communicate):
         
         parts = self.text.split("[[%pause:")
         for part in parts:
-            if "]" in part:
+            if "%]]" in part:
                 pause_time, content = part.split("%]]", 1)
                 yield int(pause_time), content.strip()
 
